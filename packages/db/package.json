@@ -1,0 +1,21 @@
+{
+	"name": "@itube/db",
+	"version": "0.0.1",
+	"private": true,
+	"main": "./src/index.ts",
+	"exports": { ".": "./src/index.ts" },
+	"scripts": {
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate"
+	},
+	"dependencies": {
+		"drizzle-orm": "^0.44.0",
+		"postgres": "^3.4.5",
+		"@paralleldrive/cuid2": "^2.2.2"
+	},
+	"devDependencies": {
+		"drizzle-kit": "^0.31.0",
+		"@itube/config": "workspace:*",
+		"typescript": "^5.7.0"
+	}
+}

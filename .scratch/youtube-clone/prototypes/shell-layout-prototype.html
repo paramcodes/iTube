@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Shell Layout Prototype</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            yt: {
+              base: '#0f0f0f',
+              raised: '#212121',
+              menu: '#282828',
+              input: '#121212',
+              pill: '#272727',
+              pillActive: '#f1f1f1',
+              pillActiveText: '#0f0f0f',
+              textPrimary: '#f1f1f1',
+              textSecondary: '#aaaaaa',
+              red: '#ff0000',
+              blue: '#3ea6ff',
+              border: 'rgba(255, 255, 255, 0.1)',
+              borderFocus: 'rgba(255, 255, 255, 0.3)',
+              hover: 'rgba(255, 255, 255, 0.1)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #f1f1f1;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Ambient Glow for Variant C */
+    .ambient-glow:hover {
+      box-shadow: 0 12px 36px -8px rgba(62, 166, 255, 0.25);
+    }
+  </style>
+</head>
+<body class="bg-yt-base text-yt-textPrimary antialiased selection:bg-yt-red selection:text-white">
+
+  <!-- ========================================== -->
+  <!-- 1. TOP MASTHEAD (SHARED NAVIGATION)        -->
+  <!-- ========================================== -->
+  <header id="masthead" class="sticky top-0 z-40 flex h-14 w-full items-center justify-between border-b border-yt-border bg-yt-base/95 px-4 backdrop-blur-md transition-all duration-300">
+    <!-- Left: Hamburger & YouTube Logo -->
+    <div class="flex items-center gap-4">
+      <button id="toggleGuideBtn" class="flex h-10 w-10 items-center justify-center rounded-full text-yt-textPrimary hover:bg-yt-hover active:scale-95 transition-transform" title="Toggle Guide">
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="#" class="flex items-center gap-1.5 focus:outline-none">
+        <div class="flex h-6 w-8 items-center justify-center rounded-lg bg-yt-red text-white">
+          <svg class="h-4 w-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-white flex items-center">
+          iTube<span class="text-[10px] font-semibold text-yt-textSecondary ml-1">CLONE</span>
+        </span>
+      </a>
+    </div>
+
+    <!-- Center: Search Bar & Mic -->
+    <div class="flex max-w-[720px] flex-1 items-center justify-center px-4">
+      <div class="flex w-full max-w-[600px] items-center">
+        <div class="relative flex w-full items-center">
+          <input id="searchInput" type="text" placeholder="Search videos..." class="h-10 w-full rounded-l-full border border-yt-border bg-yt-input px-4 text-sm text-yt-textPrimary placeholder-yt-textSecondary focus:border-yt-blue focus:outline-none focus:ring-1 focus:ring-yt-blue">
+        </div>
+        <button class="flex h-10 w-16 items-center justify-center rounded-r-full border border-l-0 border-yt-border bg-yt-hover text-yt-textPrimary hover:bg-white/15">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </button>
+      </div>
+      <button class="ml-3 flex h-10 w-10 items-center justify-center rounded-full bg-yt-pill text-yt-textPrimary hover:bg-white/15 transition-colors">
+        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
+      </button>
+    </div>
+
+    <!-- Right: Studio, Notifications, Profile Avatar -->
+    <div class="flex items-center gap-3">
+      <button class="flex items-center gap-2 rounded-full bg-yt-hover px-3.5 py-1.5 text-xs font-semibold text-yt-textPrimary hover:bg-white/15">
+        <svg class="h-4 w-4 text-yt-red" fill="currentColor" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+        <span>Create</span>
+      </button>
+      <button class="relative flex h-10 w-10 items-center justify-center rounded-full text-yt-textPrimary hover:bg-yt-hover">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        <span class="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-yt-red"></span>
+      </button>
+      <div class="h-8 w-8 overflow-hidden rounded-full ring-2 ring-yt-border bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center font-bold text-xs text-white">
+        YT
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- 2. MAIN CONTAINER WITH GUIDE DRAWER        -->
+  <!-- ========================================== -->
+  <div class="flex min-h-[calc(100vh-56px)] w-full">
+
+    <!-- GUIDE DRAWER (Expanded 240px or Mini 72px) -->
+    <aside id="guideDrawer" class="sticky top-14 h-[calc(100vh-56px)] shrink-0 overflow-y-auto no-scrollbar border-r border-yt-border bg-yt-base transition-all duration-300 w-60">
+      
+      <!-- Expanded Nav (Default) -->
+      <div id="expandedNav" class="flex flex-col gap-1 p-3">
+        <a href="#" class="flex items-center gap-6 rounded-xl bg-yt-hover px-3 py-2.5 text-sm font-semibold text-white">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="#" class="flex items-center gap-6 rounded-xl px-3 py-2.5 text-sm font-medium text-yt-textPrimary hover:bg-yt-hover">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+          <span>Subscriptions</span>
+        </a>
+        <a href="#" class="flex items-center gap-6 rounded-xl px-3 py-2.5 text-sm font-medium text-yt-textPrimary hover:bg-yt-hover">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span>Shorts</span>
+        </a>
+
+        <hr class="my-2 border-yt-border">
+
+        <div class="px-3 py-1 text-xs font-semibold text-yt-textSecondary uppercase tracking-wider">Library</div>
+        <a href="#" class="flex items-center gap-6 rounded-xl px-3 py-2.5 text-sm font-medium text-yt-textPrimary hover:bg-yt-hover">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+          <span>History</span>
+        </a>
+        <a href="#" class="flex items-center gap-6 rounded-xl px-3 py-2.5 text-sm font-medium text-yt-textPrimary hover:bg-yt-hover">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+          <span>Your Videos</span>
+        </a>
+        <a href="#" class="flex items-center gap-6 rounded-xl px-3 py-2.5 text-sm font-medium text-yt-textPrimary hover:bg-yt-hover">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+          <span>Watch Later</span>
+        </a>
+        <a href="#" class="flex items-center gap-6 rounded-xl px-3 py-2.5 text-sm font-medium text-yt-textPrimary hover:bg-yt-hover">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+          <span>Liked Videos</span>
+        </a>
+
+        <hr class="my-2 border-yt-border">
+
+        <div class="px-3 py-1 text-xs font-semibold text-yt-textSecondary uppercase tracking-wider">Subscriptions</div>
+        <div class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-yt-textPrimary hover:bg-yt-hover">
+          <div class="h-6 w-6 rounded-full bg-blue-500 text-[10px] flex items-center justify-center font-bold">BK</div>
+          <span class="truncate">Bitter Tech</span>
+        </div>
+        <div class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-yt-textPrimary hover:bg-yt-hover">
+          <div class="h-6 w-6 rounded-full bg-emerald-500 text-[10px] flex items-center justify-center font-bold">EX</div>
+          <span class="truncate">Elysia Devs</span>
+        </div>
+      </div>
+
+      <!-- Mini Nav (Compact 72px) -->
+      <div id="miniNav" class="hidden flex-col items-center gap-4 py-3">
+        <a href="#" class="flex flex-col items-center gap-1.5 rounded-xl p-2 text-[10px] font-medium text-white hover:bg-yt-hover w-14">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span>Home</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1.5 rounded-xl p-2 text-[10px] font-medium text-yt-textSecondary hover:bg-yt-hover w-14">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span>Shorts</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1.5 rounded-xl p-2 text-[10px] font-medium text-yt-textSecondary hover:bg-yt-hover w-14">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+          <span>Subs</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1.5 rounded-xl p-2 text-[10px] font-medium text-yt-textSecondary hover:bg-yt-hover w-14">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+          <span>You</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- 3. MAIN CONTENT AREA (VARIANT CONTROLLED)  -->
+    <!-- ========================================== -->
+    <main id="mainContent" class="flex-1 overflow-y-auto px-6 py-4">
+
+      <!-- Category Filter Pills Bar (Shared across A & B) -->
+      <div id="categoryPillBar" class="sticky top-14 z-30 mb-6 flex items-center gap-3 overflow-x-auto no-scrollbar py-2 bg-yt-base/95 backdrop-blur-md">
+        <button class="shrink-0 rounded-lg bg-yt-pillActive px-3 py-1.5 text-xs font-semibold text-yt-pillActiveText shadow">All</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Gaming</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Music</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Podcasts</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Next.js 15</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Elysia Bun</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Drizzle ORM</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Mux Streaming</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">TypeScript</button>
+        <button class="shrink-0 rounded-lg bg-yt-pill px-3 py-1.5 text-xs font-medium text-yt-textPrimary hover:bg-white/15">Live Coding</button>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VARIANT A: CLASSIC YOUTUBE PRODUCTION SHELL-->
+      <!-- ========================================== -->
+      <section id="variantA" class="variant-view">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-lg font-bold text-white">Recommended Videos</h2>
+          <span class="text-xs text-yt-textSecondary">Standard 4-column card grid</span>
+        </div>
+
+        <div class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <!-- Video Card 1 -->
+          <div class="group flex cursor-pointer flex-col">
+            <div class="relative aspect-video w-full overflow-hidden rounded-xl bg-yt-raised">
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" alt="Thumbnail" class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105">
+              <span class="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">18:42</span>
+            </div>
+            <div class="mt-3 flex gap-3">
+              <div class="h-9 w-9 shrink-0 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-xs font-bold">BT</div>
+              <div class="flex flex-col">
+                <h3 class="line-clamp-2 text-sm font-semibold text-white group-hover:text-yt-blue">Building a YouTube Clone with Bun, Elysia, and Next.js 15</h3>
+                <div class="mt-1 flex items-center gap-1 text-xs text-yt-textSecondary">
+                  <span>Bitter Tech</span>
+                  <svg class="h-3 w-3 fill-current text-yt-textSecondary" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                </div>
+                <div class="text-xs text-yt-textSecondary">482K views • 3 days ago</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 2 -->
+          <div class="group flex cursor-pointer flex-col">
+            <div class="relative aspect-video w-full overflow-hidden rounded-xl bg-yt-raised">
+              <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80" alt="Thumbnail" class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105">
+              <span class="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">24:15</span>
+            </div>
+            <div class="mt-3 flex gap-3">
+              <div class="h-9 w-9 shrink-0 rounded-full bg-gradient-to-tr from-amber-500 to-red-500 flex items-center justify-center text-xs font-bold">EX</div>
+              <div class="flex flex-col">
+                <h3 class="line-clamp-2 text-sm font-semibold text-white group-hover:text-yt-blue">High Throughput Webhook Ingestion with Elysia & HMAC Signatures</h3>
+                <div class="mt-1 flex items-center gap-1 text-xs text-yt-textSecondary">
+                  <span>Elysia Devs</span>
+                  <svg class="h-3 w-3 fill-current text-yt-textSecondary" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                </div>
+                <div class="text-xs text-yt-textSecondary">129K views • 1 week ago</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 3 -->
+          <div class="group flex cursor-pointer flex-col">
+            <div class="relative aspect-video w-full overflow-hidden rounded-xl bg-yt-raised">
+              <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop&q=80" alt="Thumbnail" class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105">
+              <span class="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">12:08</span>
+            </div>
+            <div class="mt-3 flex gap-3">
+              <div class="h-9 w-9 shrink-0 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-xs font-bold">DZ</div>
+              <div class="flex flex-col">
+                <h3 class="line-clamp-2 text-sm font-semibold text-white group-hover:text-yt-blue">Drizzle ORM Keyset Pagination for Infinite Scroll Feeds</h3>
+                <div class="mt-1 flex items-center gap-1 text-xs text-yt-textSecondary">
+                  <span>Database Deepdive</span>
+                </div>
+                <div class="text-xs text-yt-textSecondary">84K views • 5 hours ago</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Card 4 -->
+          <div class="group flex cursor-pointer flex-col">
+            <div class="relative aspect-video w-full overflow-hidden rounded-xl bg-yt-raised">
+              <img src="https://images.unsplash.com/photo-1534972195531-a756b1126f24?w=800&auto=format&fit=crop&q=80" alt="Thumbnail" class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105">
+              <span class="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">45:30</span>
+            </div>
+            <div class="mt-3 flex gap-3">
+              <div class="h-9 w-9 shrink-0 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 flex items-center justify-center text-xs font-bold">MX</div>
+              <div class="flex flex-col">
+                <h3 class="line-clamp-2 text-sm font-semibold text-white group-hover:text-yt-blue">Mux Video Player React: Multi-Bitrate HLS & Storyboards</h3>
+                <div class="mt-1 flex items-center gap-1 text-xs text-yt-textSecondary">
+                  <span>Mux Engineering</span>
+                </div>
+                <div class="text-xs text-yt-textSecondary">61K views • 2 weeks ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VARIANT B: COMPACT DENSE STUDIO FEED       -->
+      <!-- ========================================== -->
+      <section id="variantB" class="variant-view hidden">
+        <div class="mb-4 flex items-center justify-between border-b border-yt-border pb-3">
+          <div>
+            <h2 class="text-lg font-bold text-white">Studio Analytics Feed</h2>
+            <p class="text-xs text-yt-textSecondary">High-density 2-column horizontal cards with inline analytics metrics</p>
+          </div>
+          <div class="flex gap-2">
+            <span class="rounded bg-yt-raised px-2.5 py-1 text-xs font-semibold text-yt-textPrimary border border-yt-border">Sort: Top Performing</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <!-- Dense Card 1 -->
+          <div class="flex gap-4 rounded-xl border border-yt-border bg-yt-raised/60 p-3 hover:border-yt-borderFocus transition-colors">
+            <div class="relative aspect-video w-48 shrink-0 overflow-hidden rounded-lg bg-black">
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" alt="Thumb" class="h-full w-full object-cover">
+              <span class="absolute bottom-1 right-1 rounded bg-black/80 px-1 text-[10px] text-white">18:42</span>
+            </div>
+            <div class="flex flex-1 flex-col justify-between">
+              <div>
+                <h3 class="line-clamp-2 text-sm font-bold text-white">Building a YouTube Clone with Bun, Elysia, and Next.js 15</h3>
+                <div class="mt-1 text-xs text-yt-textSecondary">Published Oct 10, 2026 • Public</div>
+              </div>
+              <div class="mt-2 grid grid-cols-3 gap-2 border-t border-yt-border/50 pt-2 text-center text-xs">
+                <div>
+                  <div class="font-bold text-white">482,104</div>
+                  <div class="text-[10px] text-yt-textSecondary">Views</div>
+                </div>
+                <div>
+                  <div class="font-bold text-emerald-400">98.4%</div>
+                  <div class="text-[10px] text-yt-textSecondary">Like Ratio</div>
+                </div>
+                <div>
+                  <div class="font-bold text-yt-blue">12.4m</div>
+                  <div class="text-[10px] text-yt-textSecondary">Avg Watch</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dense Card 2 -->
+          <div class="flex gap-4 rounded-xl border border-yt-border bg-yt-raised/60 p-3 hover:border-yt-borderFocus transition-colors">
+            <div class="relative aspect-video w-48 shrink-0 overflow-hidden rounded-lg bg-black">
+              <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80" alt="Thumb" class="h-full w-full object-cover">
+              <span class="absolute bottom-1 right-1 rounded bg-black/80 px-1 text-[10px] text-white">24:15</span>
+            </div>
+            <div class="flex flex-1 flex-col justify-between">
+              <div>
+                <h3 class="line-clamp-2 text-sm font-bold text-white">High Throughput Webhook Ingestion with Elysia & HMAC</h3>
+                <div class="mt-1 text-xs text-yt-textSecondary">Published Oct 5, 2026 • Public</div>
+              </div>
+              <div class="mt-2 grid grid-cols-3 gap-2 border-t border-yt-border/50 pt-2 text-center text-xs">
+                <div>
+                  <div class="font-bold text-white">129,400</div>
+                  <div class="text-[10px] text-yt-textSecondary">Views</div>
+                </div>
+                <div>
+                  <div class="font-bold text-emerald-400">99.1%</div>
+                  <div class="text-[10px] text-yt-textSecondary">Like Ratio</div>
+                </div>
+                <div>
+                  <div class="font-bold text-yt-blue">18.1m</div>
+                  <div class="text-[10px] text-yt-textSecondary">Avg Watch</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VARIANT C: AMBIENT CINEMA SHELL            -->
+      <!-- ========================================== -->
+      <section id="variantC" class="variant-view hidden">
+        <div class="mb-6 flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-white">Cinema Ambient Experience</h2>
+            <p class="text-xs text-yt-textSecondary">Minimal zero-drawer canvas, 3-column wide cards with ambient backlight glow</p>
+          </div>
+          <span class="rounded-full bg-yt-blue/20 text-yt-blue px-3 py-1 text-xs font-semibold">Cinema Mode Active</span>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <!-- Cinema Card 1 -->
+          <div class="ambient-glow group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-yt-raised border border-yt-border transition-all duration-300">
+            <div class="relative aspect-video w-full overflow-hidden bg-black">
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" alt="Thumb" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80"></div>
+              <span class="absolute bottom-3 right-3 rounded-md bg-black/90 px-2 py-0.5 text-xs font-bold text-white backdrop-blur">18:42</span>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center gap-2 text-xs font-semibold text-yt-blue">
+                <span>FULL HD 1080P</span>
+                <span>•</span>
+                <span>BITTER TECH</span>
+              </div>
+              <h3 class="mt-1 line-clamp-2 text-base font-bold text-white group-hover:text-yt-blue transition-colors">Building a YouTube Clone with Bun, Elysia, and Next.js 15</h3>
+              <p class="mt-2 text-xs text-yt-textSecondary">482K views • 3 days ago • 142 comments</p>
+            </div>
+          </div>
+
+          <!-- Cinema Card 2 -->
+          <div class="ambient-glow group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-yt-raised border border-yt-border transition-all duration-300">
+            <div class="relative aspect-video w-full overflow-hidden bg-black">
+              <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80" alt="Thumb" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80"></div>
+              <span class="absolute bottom-3 right-3 rounded-md bg-black/90 px-2 py-0.5 text-xs font-bold text-white backdrop-blur">24:15</span>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center gap-2 text-xs font-semibold text-yt-blue">
+                <span>4K ULTRA HD</span>
+                <span>•</span>
+                <span>ELYSIA DEVS</span>
+              </div>
+              <h3 class="mt-1 line-clamp-2 text-base font-bold text-white group-hover:text-yt-blue transition-colors">High Throughput Webhook Ingestion with Elysia & HMAC</h3>
+              <p class="mt-2 text-xs text-yt-textSecondary">129K views • 1 week ago • 98 comments</p>
+            </div>
+          </div>
+
+          <!-- Cinema Card 3 -->
+          <div class="ambient-glow group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-yt-raised border border-yt-border transition-all duration-300">
+            <div class="relative aspect-video w-full overflow-hidden bg-black">
+              <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop&q=80" alt="Thumb" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80"></div>
+              <span class="absolute bottom-3 right-3 rounded-md bg-black/90 px-2 py-0.5 text-xs font-bold text-white backdrop-blur">12:08</span>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center gap-2 text-xs font-semibold text-yt-blue">
+                <span>FULL HD 1080P</span>
+                <span>•</span>
+                <span>DATABASE DEEPDIVE</span>
+              </div>
+              <h3 class="mt-1 line-clamp-2 text-base font-bold text-white group-hover:text-yt-blue transition-colors">Drizzle ORM Keyset Pagination for Infinite Scroll Feeds</h3>
+              <p class="mt-2 text-xs text-yt-textSecondary">84K views • 5 hours ago • 45 comments</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 4. FLOATING PROTOTYPE SWITCHER (UI.md)     -->
+  <!-- ========================================== -->
+  <div id="prototypeSwitcher" class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-2 rounded-full border border-yt-border bg-black/90 px-4 py-2 text-white shadow-2xl backdrop-blur-xl ring-1 ring-white/10 select-none">
+    <button id="prevVariantBtn" class="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition-transform" title="Previous Variant (Left Arrow)">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+
+    <div class="flex items-center gap-2 px-2 text-xs font-semibold tracking-wide">
+      <span class="rounded bg-yt-red px-1.5 py-0.5 font-mono text-[10px]">PROTOTYPE</span>
+      <span id="variantLabel" class="text-yt-textPrimary">Variant A: Classic YouTube Shell</span>
+    </div>
+
+    <button id="nextVariantBtn" class="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:scale-95 transition-transform" title="Next Variant (Right Arrow)">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 5. INTERACTIVE SCRIPT LOGIC                -->
+  <!-- ========================================== -->
+  <script>
+    const variants = [
+      { id: 'A', name: 'Variant A: Classic YouTube Shell', desc: '56px masthead, 240px/72px collapsible drawer, 4-col card grid' },
+      { id: 'B', name: 'Variant B: Compact Studio Feed', desc: '72px mini-guide, 2-col horizontal cards with inline analytics metrics' },
+      { id: 'C', name: 'Variant C: Ambient Cinema Shell', desc: 'Minimal canvas, zero persistent drawer, 3-col ambient backlight cards' }
+    ];
+
+    let currentIdx = 0;
+
+    // Read variant from URL param if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialVariant = urlParams.get('variant');
+    if (initialVariant) {
+      const foundIdx = variants.findIndex(v => v.id.toUpperCase() === initialVariant.toUpperCase());
+      if (foundIdx !== -1) currentIdx = foundIdx;
+    }
+
+    function renderVariant(idx) {
+      currentIdx = (idx + variants.length) % variants.length;
+      const v = variants[currentIdx];
+
+      // Update URL search param without reload
+      const url = new URL(window.location);
+      url.searchParams.set('variant', v.id);
+      window.history.replaceState({}, '', url);
+
+      // Update switcher label
+      document.getElementById('variantLabel').textContent = v.name;
+
+      // Show/Hide views
+      document.querySelectorAll('.variant-view').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById('variant' + v.id);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Adjust drawer & layout per variant
+      const guideDrawer = document.getElementById('guideDrawer');
+      const expandedNav = document.getElementById('expandedNav');
+      const miniNav = document.getElementById('miniNav');
+      const categoryPillBar = document.getElementById('categoryPillBar');
+
+      if (v.id === 'A') {
+        guideDrawer.classList.remove('w-0', 'w-18', 'border-none', 'hidden');
+        guideDrawer.classList.add('w-60');
+        expandedNav.classList.remove('hidden');
+        miniNav.classList.add('hidden');
+        categoryPillBar.classList.remove('hidden');
+      } else if (v.id === 'B') {
+        guideDrawer.classList.remove('w-60', 'w-0', 'border-none', 'hidden');
+        guideDrawer.classList.add('w-18');
+        expandedNav.classList.add('hidden');
+        miniNav.classList.remove('hidden');
+        categoryPillBar.classList.remove('hidden');
+      } else if (v.id === 'C') {
+        guideDrawer.classList.add('hidden');
+        categoryPillBar.classList.add('hidden');
+      }
+    }
+
+    // Drawer collapse toggle
+    let isDrawerCollapsed = false;
+    document.getElementById('toggleGuideBtn').addEventListener('click', () => {
+      const guideDrawer = document.getElementById('guideDrawer');
+      const expandedNav = document.getElementById('expandedNav');
+      const miniNav = document.getElementById('miniNav');
+
+      if (variants[currentIdx].id === 'C') {
+        guideDrawer.classList.toggle('hidden');
+        return;
+      }
+
+      isDrawerCollapsed = !isDrawerCollapsed;
+      if (isDrawerCollapsed) {
+        guideDrawer.classList.remove('w-60');
+        guideDrawer.classList.add('w-18');
+        expandedNav.classList.add('hidden');
+        miniNav.classList.remove('hidden');
+      } else {
+        guideDrawer.classList.remove('w-18');
+        guideDrawer.classList.add('w-60');
+        expandedNav.classList.remove('hidden');
+        miniNav.classList.add('hidden');
+      }
+    });
+
+    // Prev / Next button listeners
+    document.getElementById('prevVariantBtn').addEventListener('click', () => renderVariant(currentIdx - 1));
+    document.getElementById('nextVariantBtn').addEventListener('click', () => renderVariant(currentIdx + 1));
+
+    // Keyboard navigation: ArrowLeft / ArrowRight (when not typing in search)
+    window.addEventListener('keydown', (e) => {
+      const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      if (activeTag === 'input' || activeTag === 'textarea') return;
+
+      if (e.key === 'ArrowLeft') renderVariant(currentIdx - 1);
+      if (e.key === 'ArrowRight') renderVariant(currentIdx + 1);
+    });
+
+    // Initial render
+    renderVariant(currentIdx);
+  </script>
+</body>
+</html>
