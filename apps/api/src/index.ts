@@ -1,17 +1,14 @@
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
-import { requireChannelOwner } from "./lib/auth";
 import { channelRoutes } from "./routes/channels";
 import { commentRoutes } from "./routes/comments";
 import { feedRoutes } from "./routes/feed";
+import { reactionRoutes } from "./routes/reactions";
 import { searchRoutes } from "./routes/search";
+import { studioRoutes } from "./routes/studio";
 import { uploadRoutes } from "./routes/upload";
 import { videoRoutes } from "./routes/videos";
 import { webhookRoutes } from "./routes/webhooks";
-
-const studioStub = new Elysia({ prefix: "/api/studio" })
-	.use(requireChannelOwner)
-	.get("/videos", () => ({ items: [], nextCursor: null }));
 
 export const app = new Elysia()
 	.use(cors())
@@ -22,6 +19,7 @@ export const app = new Elysia()
 	.use(feedRoutes)
 	.use(searchRoutes)
 	.use(commentRoutes)
-	.use(studioStub);
+	.use(reactionRoutes)
+	.use(studioRoutes);
 
 export type App = typeof app;
