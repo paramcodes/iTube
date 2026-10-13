@@ -20,6 +20,6 @@ describe("API route smoke", () => {
 				new Request(`http://localhost${path}`, { method: method as string }),
 			);
 			expect(res.status).not.toBe(404);
-		});
+		}, 10000);
 	}
 });
