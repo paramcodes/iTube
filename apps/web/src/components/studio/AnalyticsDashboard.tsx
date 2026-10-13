@@ -1,26 +1,24 @@
 import { env } from "@/env";
+import { useAuthFetch } from "@/lib/authFetch";
 import { useQuery } from "@tanstack/react-query";
 import * as React from "react";
 
 export function AnalyticsDashboard() {
 	const [days, setDays] = React.useState<7 | 28>(28);
+	const authFetch = useAuthFetch();
 
 	const { data, isLoading } = useQuery({
 		queryKey: ["studio-analytics", days],
 		queryFn: async () => {
-			const res = await fetch(
+			const res = await authFetch(
 				`${env.NEXT_PUBLIC_API_URL}/api/studio/analytics?days=${days}`,
-				{
-					headers: {
-						Authorization: "Bearer test_token",
-					},
-				},
 			);
 			if (!res.ok) return null;
 			return (await res.json()) as {
-				viewsLast7Days: number;
-				watchTimeSecondsLast7Days: number;
-				subscribersGainedLast7Days: number;
+				days: number;
+				views: number;
+				watchTimeSeconds: number;
+				subscribersGained: number;
 			};
 		},
 	});
@@ -72,7 +70,7 @@ export function AnalyticsDashboard() {
 							Views
 						</span>
 						<div className="text-2xl font-bold text-white mt-1">
-							{(data?.viewsLast7Days || 0).toLocaleString()}
+							{(data?.views || 0).toLocaleString()}
 						</div>
 					</div>
 					<div className="bg-[#121212] border border-[#2b2b2b] rounded-xl p-4">
@@ -80,7 +78,7 @@ export function AnalyticsDashboard() {
 							Watch Time
 						</span>
 						<div className="text-2xl font-bold text-white mt-1">
-							{Math.round((data?.watchTimeSecondsLast7Days || 0) / 3600)} hrs
+							{Math.round((data?.watchTimeSeconds || 0) / 3600)} hrs
 						</div>
 					</div>
 					<div className="bg-[#121212] border border-[#2b2b2b] rounded-xl p-4">
@@ -88,7 +86,7 @@ export function AnalyticsDashboard() {
 							Subscribers Gained
 						</span>
 						<div className="text-2xl font-bold text-white mt-1">
-							{(data?.subscribersGainedLast7Days || 0).toLocaleString()}
+							{(data?.subscribersGained || 0).toLocaleString()}
 						</div>
 					</div>
 				</div>

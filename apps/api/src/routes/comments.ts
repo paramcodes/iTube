@@ -185,7 +185,7 @@ export const commentRoutes = new Elysia()
 		"/api/videos/:id/comments/stream",
 		({ params: { id: videoId } }) => {
 			const bus = acquireCommentBus(videoId);
-			let heartbeatTimer: Timer | null = null;
+			let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 
 			const stream = new ReadableStream({
 				start(controller) {

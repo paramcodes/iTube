@@ -14,7 +14,7 @@
 		"@mux/mux-node": "^9.0.1",
 		"@upstash/qstash": "^2.7.20",
 		"@upstash/redis": "^1.34.4",
-		"drizzle-orm": "^0.45.4",
+		"drizzle-orm": "^0.44.0",
 		"elysia": "^1.2.0",
 		"zod": "^4.6.7"
 	},

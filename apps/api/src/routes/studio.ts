@@ -82,6 +82,15 @@ export const studioRoutes = new Elysia({ prefix: "/api/studio" })
 			}),
 		},
 	)
-	.get("/analytics", async ({ channel }) => {
-		return await getChannelAnalytics(channel.id);
-	});
+	.get(
+		"/analytics",
+		async ({ channel, query: { days } }) => {
+			const d = days === "7" ? 7 : 28;
+			return await getChannelAnalytics(channel.id, d);
+		},
+		{
+			query: t.Object({
+				days: t.Optional(t.String()),
+			}),
+		},
+	);

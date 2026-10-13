@@ -1,20 +1,8 @@
+@import "../../../../packages/ui/src/theme/youtube-tokens.css";
 @import "tailwindcss";
 
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "./src/**/*.{ts,tsx}";
-
-:root {
-	--yt-bg-base: #0f0f0f;
-	--yt-bg-surface: #212121;
-	--yt-bg-elevated: #3d3d3d;
-	--yt-text-primary: #f1f1f1;
-	--yt-text-secondary: #aaaaaa;
-	--yt-accent-red: #ff0000;
-	--yt-accent-blue: #3ea6ff;
-	--yt-masthead-height: 56px;
-	--yt-drawer-width: 240px;
-	--yt-drawer-mini-width: 72px;
-}
 
 body {
 	background-color: var(--yt-bg-base);

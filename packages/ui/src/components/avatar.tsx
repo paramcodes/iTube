@@ -17,12 +17,21 @@ export const Avatar = React.forwardRef<
 ));
 Avatar.displayName = AvatarPrimitive.Root.displayName;
 
+export interface AvatarImageProps
+	extends Omit<
+		React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>,
+		"src"
+	> {
+	src?: string | Blob | null | undefined;
+}
+
 export const AvatarImage = React.forwardRef<
 	React.ElementRef<typeof AvatarPrimitive.Image>,
-	React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, ...props }, ref) => (
+	AvatarImageProps
+>(({ className, src, ...props }, ref) => (
 	<AvatarPrimitive.Image
 		ref={ref}
+		src={src ?? undefined}
 		className={cn("aspect-square h-full w-full object-cover", className)}
 		{...props}
 	/>

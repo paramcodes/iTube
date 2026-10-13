@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { useAuthFetch } from "@/lib/authFetch";
 import { queryClient } from "@/lib/query-client";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 
@@ -19,6 +20,7 @@ export interface StudioVideo {
 }
 
 export function useStudioVideos(visibility?: string) {
+	const authFetch = useAuthFetch();
 	const query = useInfiniteQuery({
 		queryKey: ["studio-videos", visibility],
 		queryFn: async ({ pageParam }) => {
@@ -26,11 +28,7 @@ export function useStudioVideos(visibility?: string) {
 			if (visibility) url.searchParams.set("visibility", visibility);
 			if (pageParam) url.searchParams.set("cursor", pageParam);
 
-			const res = await fetch(url.toString(), {
-				headers: {
-					Authorization: "Bearer test_token",
-				},
-			});
+			const res = await authFetch(url.toString());
 			if (!res.ok) throw new Error("Failed to fetch studio videos");
 			return (await res.json()) as {
 				items: StudioVideo[];
@@ -49,14 +47,11 @@ export function useStudioVideos(visibility?: string) {
 			id: string;
 			input: Partial<StudioVideo>;
 		}) => {
-			const res = await fetch(
+			const res = await authFetch(
 				`${env.NEXT_PUBLIC_API_URL}/api/studio/videos/${id}`,
 				{
 					method: "PATCH",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: "Bearer test_token",
-					},
+					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(input),
 				},
 			);
@@ -70,14 +65,9 @@ export function useStudioVideos(visibility?: string) {
 
 	const deleteMutation = useMutation({
 		mutationFn: async (id: string) => {
-			const res = await fetch(
+			const res = await authFetch(
 				`${env.NEXT_PUBLIC_API_URL}/api/studio/videos/${id}`,
-				{
-					method: "DELETE",
-					headers: {
-						Authorization: "Bearer test_token",
-					},
-				},
+				{ method: "DELETE" },
 			);
 			if (!res.ok) throw new Error("Failed to delete video");
 			return true;

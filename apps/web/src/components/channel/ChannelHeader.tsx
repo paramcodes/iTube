@@ -2,7 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage, Button } from "@itube/ui";
-import { Bell, Check } from "lucide-react";
+import { Bell } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import { useSubscription } from "../../hooks/useSubscription";

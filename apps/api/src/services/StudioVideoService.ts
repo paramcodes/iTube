@@ -11,7 +11,11 @@ import { mux } from "./MuxService";
 
 export async function listStudioVideos(
 	channelId: string,
-	opts: { cursor?: string; limit?: number; visibility?: string },
+	opts: {
+		cursor?: string | undefined;
+		limit?: number | undefined;
+		visibility?: string | undefined;
+	},
 ) {
 	const pageSize = opts.limit ?? 20;
 	const conditions: SQL[] = [eq(videos.channelId, channelId)];
@@ -149,10 +153,13 @@ export async function removeStudioVideo(channelId: string, videoId: string) {
 	return true;
 }
 
-export async function getChannelAnalytics(channelId: string) {
-	const sevenDaysAgo = new Date();
-	sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-	const dateStr = sevenDaysAgo.toISOString().split("T")[0] ?? "";
+export async function getChannelAnalytics(
+	channelId: string,
+	days: 7 | 28 = 28,
+) {
+	const cutoff = new Date();
+	cutoff.setDate(cutoff.getDate() - days);
+	const dateStr = cutoff.toISOString().split("T")[0] ?? "";
 
 	const stats = await db
 		.select({
@@ -175,8 +182,9 @@ export async function getChannelAnalytics(channelId: string) {
 	};
 
 	return {
-		viewsLast7Days: Number(summary.totalViews),
-		watchTimeSecondsLast7Days: Number(summary.totalWatchTime),
-		subscribersGainedLast7Days: Number(summary.netSubscribers),
+		days,
+		views: Number(summary.totalViews),
+		watchTimeSeconds: Number(summary.totalWatchTime),
+		subscribersGained: Number(summary.netSubscribers),
 	};
 }

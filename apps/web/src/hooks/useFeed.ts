@@ -171,7 +171,7 @@ export function useFeed(category: string) {
 					api: {
 						feed: {
 							get: (params: {
-								query: { category: string; cursor?: string };
+								query: { category: string; cursor?: string | undefined };
 							}) => Promise<{ data: FeedPage | null }>;
 						};
 					};
@@ -179,7 +179,7 @@ export function useFeed(category: string) {
 				const res = await client.api.feed.get({
 					query: {
 						category,
-						cursor: pageParam ?? undefined,
+						...(pageParam ? { cursor: pageParam } : {}),
 					},
 				});
 				if (res.data?.items && res.data.items.length > 0) {

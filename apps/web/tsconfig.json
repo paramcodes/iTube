@@ -1,12 +1,12 @@
 {
 	"extends": "../../packages/config/tsconfig.base.json",
 	"compilerOptions": {
-		"rootDir": "./src",
 		"outDir": "./dist",
 		"jsx": "preserve",
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@itube/api": ["../../apps/api/src/index.ts"]
 		},
 		"allowJs": true,
 		"noEmit": true,
@@ -20,6 +20,6 @@
 			}
 		]
 	},
-	"include": ["src/**/*", ".next/types/**/*.ts"],
+	"include": ["src/**/*", ".next/types/**/*.ts", "../../apps/api/src/index.ts"],
 	"exclude": ["node_modules"]
 }
