@@ -35,6 +35,7 @@ if (process.env.NODE_ENV !== "test") {
 	startViewFlushJob();
 	startSchedulingFallback();
 	startDailyStatsRollup();
+	app.listen(3001);
 }
 
 export type App = typeof app;

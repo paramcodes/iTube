@@ -6,3 +6,6 @@ dist
 drizzle/
 .superpowers/
 *.db
+test-results
+playwright-report
+blob-report
