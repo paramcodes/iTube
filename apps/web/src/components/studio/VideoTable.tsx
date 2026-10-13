@@ -1,5 +1,14 @@
 "use client";
 
+import { Button } from "@itube/ui";
+import {
+	Calendar,
+	Eye,
+	MessageSquare,
+	MoreVertical,
+	Pencil,
+	Trash2,
+} from "lucide-react";
 import * as React from "react";
 import type { StudioVideo } from "../../hooks/useStudioVideos";
 import { VideoEditModal } from "./VideoEditModal";
@@ -16,35 +25,38 @@ export function VideoTable({ videos, onUpdate, onDelete }: VideoTableProps) {
 	);
 
 	return (
-		<div className="bg-[#1e1e1e] border border-[#303030] rounded-2xl overflow-hidden shadow-xl">
-			<div className="p-4 border-b border-[#303030] flex items-center justify-between">
-				<h2 className="font-bold text-white text-base">Channel Content</h2>
+		<div className="bg-[#1e1e1e] border border-[rgba(255,255,255,0.1)] rounded-2xl overflow-hidden shadow-2xl">
+			<div className="p-5 border-b border-[rgba(255,255,255,0.1)] flex items-center justify-between">
+				<h2 className="font-bold text-white text-lg">Channel Content</h2>
 			</div>
 
 			<div className="overflow-x-auto">
 				<table className="w-full text-left text-sm text-[#f1f1f1]">
-					<thead className="bg-[#121212] text-xs uppercase text-[#888] border-b border-[#303030]">
+					<thead className="bg-[#121212] text-xs uppercase text-[#888] border-b border-[rgba(255,255,255,0.1)]">
 						<tr>
-							<th className="px-4 py-3">Video</th>
-							<th className="px-4 py-3">Visibility</th>
-							<th className="px-4 py-3">Date</th>
-							<th className="px-4 py-3">Views</th>
-							<th className="px-4 py-3">Comments</th>
-							<th className="px-4 py-3 text-right">Actions</th>
+							<th className="px-5 py-3.5">Video</th>
+							<th className="px-5 py-3.5">Visibility</th>
+							<th className="px-5 py-3.5">Date</th>
+							<th className="px-5 py-3.5">Views</th>
+							<th className="px-5 py-3.5">Comments</th>
+							<th className="px-5 py-3.5 text-right">Actions</th>
 						</tr>
 					</thead>
-					<tbody className="divide-y divide-[#272727]">
+					<tbody className="divide-y divide-[rgba(255,255,255,0.06)]">
 						{videos.length === 0 ? (
 							<tr>
-								<td colSpan={6} className="px-4 py-8 text-center text-[#888]">
+								<td colSpan={6} className="px-5 py-10 text-center text-[#888]">
 									No videos uploaded yet.
 								</td>
 							</tr>
 						) : (
 							videos.map((v) => (
-								<tr key={v.id} className="hover:bg-[#252525]">
-									<td className="px-4 py-3 flex items-center gap-3">
-										<div className="w-24 aspect-video bg-[#121212] rounded overflow-hidden shrink-0">
+								<tr
+									key={v.id}
+									className="hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+								>
+									<td className="px-5 py-3.5 flex items-center gap-3">
+										<div className="w-24 aspect-video bg-[#121212] rounded-lg overflow-hidden shrink-0 border border-[rgba(255,255,255,0.1)]">
 											{v.thumbnailUrl ? (
 												<img
 													src={v.thumbnailUrl}
@@ -61,48 +73,52 @@ export function VideoTable({ videos, onUpdate, onDelete }: VideoTableProps) {
 											{v.title}
 										</span>
 									</td>
-									<td className="px-4 py-3">
+									<td className="px-5 py-3.5">
 										<span
-											className={`text-xs px-2 py-0.5 rounded-full uppercase font-medium ${
+											className={`text-xs px-2.5 py-0.5 rounded-full uppercase font-medium border ${
 												v.visibility === "public"
-													? "bg-emerald-950 text-emerald-400 border border-emerald-800"
+													? "bg-emerald-950 text-emerald-400 border-emerald-800"
 													: v.visibility === "unlisted"
-														? "bg-amber-950 text-amber-400 border border-amber-800"
-														: "bg-neutral-800 text-neutral-400 border border-neutral-700"
+														? "bg-amber-950 text-amber-400 border-amber-800"
+														: "bg-neutral-800 text-neutral-400 border-neutral-700"
 											}`}
 										>
 											{v.visibility}
 										</span>
 									</td>
-									<td className="px-4 py-3 text-xs text-[#888]">
+									<td className="px-5 py-3.5 text-xs text-[#888]">
 										{new Date(v.createdAt).toLocaleDateString()}
 									</td>
-									<td className="px-4 py-3 text-xs">
+									<td className="px-5 py-3.5 text-xs">
 										{v.viewCount.toLocaleString()}
 									</td>
-									<td className="px-4 py-3 text-xs">
+									<td className="px-5 py-3.5 text-xs">
 										{v.commentCount.toLocaleString()}
 									</td>
-									<td className="px-4 py-3 text-right">
+									<td className="px-5 py-3.5 text-right">
 										<div className="flex items-center justify-end gap-2">
-											<button
-												type="button"
+											<Button
+												variant="ghost"
+												size="sm"
 												onClick={() => setEditingVideo(v)}
-												className="px-2.5 py-1 text-xs text-[#3ea6ff] hover:bg-[#3ea6ff]/10 rounded cursor-pointer"
+												className="text-xs text-[#3ea6ff] hover:text-[#65b8ff]"
 											>
+												<Pencil className="w-3.5 h-3.5 mr-1" />
 												Edit
-											</button>
-											<button
-												type="button"
+											</Button>
+											<Button
+												variant="ghost"
+												size="sm"
 												onClick={() => {
 													if (confirm("Delete this video permanently?")) {
 														onDelete(v.id);
 													}
 												}}
-												className="px-2.5 py-1 text-xs text-red-400 hover:bg-red-400/10 rounded cursor-pointer"
+												className="text-xs text-red-400 hover:text-red-300"
 											>
+												<Trash2 className="w-3.5 h-3.5 mr-1" />
 												Delete
-											</button>
+											</Button>
 										</div>
 									</td>
 								</tr>

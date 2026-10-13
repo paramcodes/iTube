@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@itube/ui";
 import * as React from "react";
 
 export interface CategoryCarouselProps {
@@ -18,18 +19,16 @@ export function CategoryCarousel({
 			{categories.map((c) => {
 				const isActive = c === active;
 				return (
-					<button
+					<Button
 						key={c}
 						type="button"
+						variant={isActive ? "chipActive" : "chip"}
+						size="chip"
 						onClick={() => onChange(c)}
-						className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors cursor-pointer ${
-							isActive
-								? "bg-[#f1f1f1] text-[#0f0f0f]"
-								: "bg-[#272727] text-[#f1f1f1] hover:bg-[#3d3d3d]"
-						}`}
+						className="whitespace-nowrap transition-colors"
 					>
 						{c}
-					</button>
+					</Button>
 				);
 			})}
 		</div>

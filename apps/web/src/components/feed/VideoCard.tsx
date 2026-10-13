@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage, Badge } from "@itube/ui";
 import Link from "next/link";
 import * as React from "react";
 
@@ -37,7 +38,7 @@ export default function VideoCard({ video }: VideoCardProps) {
 		<div className="flex flex-col gap-3 group cursor-pointer select-none">
 			<Link
 				href={`/watch/${video.id}`}
-				className="relative aspect-video w-full rounded-xl overflow-hidden bg-[#272727]"
+				className="relative aspect-video w-full rounded-2xl overflow-hidden bg-[#272727]"
 			>
 				{video.thumbnailUrl ? (
 					<img
@@ -50,28 +51,31 @@ export default function VideoCard({ video }: VideoCardProps) {
 						No Thumbnail
 					</div>
 				)}
-				<div className="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-[11px] font-medium px-1.5 py-0.5 rounded">
-					{formatDuration(video.durationSeconds)}
+				<div className="absolute bottom-2 right-2">
+					<Badge variant="duration">
+						{formatDuration(video.durationSeconds)}
+					</Badge>
 				</div>
 			</Link>
 
 			<div className="flex gap-3 items-start px-0.5">
-				<div className="w-9 h-9 rounded-full bg-[#3d3d3d] overflow-hidden shrink-0 flex items-center justify-center text-xs font-bold text-white">
-					{video.channel.avatarUrl ? (
-						<img
+				<Link
+					href={`/channel/${video.channel.handle}`}
+					className="shrink-0 mt-0.5"
+				>
+					<Avatar className="w-9 h-9">
+						<AvatarImage
 							src={video.channel.avatarUrl}
 							alt={video.channel.name}
-							className="w-full h-full object-cover"
 						/>
-					) : (
-						video.channel.name.charAt(0)
-					)}
-				</div>
+						<AvatarFallback>{video.channel.name.charAt(0)}</AvatarFallback>
+					</Avatar>
+				</Link>
 
 				<div className="flex flex-col flex-1 overflow-hidden">
 					<Link
 						href={`/watch/${video.id}`}
-						className="text-sm font-semibold text-[#f1f1f1] line-clamp-2 leading-snug group-hover:text-white"
+						className="text-[15px] font-medium text-[#f1f1f1] line-clamp-2 leading-snug group-hover:text-white"
 					>
 						{video.title}
 					</Link>
@@ -82,7 +86,10 @@ export default function VideoCard({ video }: VideoCardProps) {
 						{video.channel.name}
 					</Link>
 					<div className="text-xs text-[#aaa] mt-0.5">
-						{formatViews(video.viewCount)}
+						{formatViews(video.viewCount)} •{" "}
+						{video.publishedAt
+							? new Date(video.publishedAt).toLocaleDateString()
+							: "Just now"}
 					</div>
 				</div>
 			</div>
