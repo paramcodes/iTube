@@ -4,6 +4,7 @@ const schema = z.object({
 	DATABASE_URL: z.string().default("postgres://localhost:5432/itube_dev"),
 	CLERK_SECRET_KEY: z.string().default("sk_test_placeholder"),
 	CLERK_PUBLISHABLE_KEY: z.string().default("pk_test_placeholder"),
+	CLERK_WEBHOOK_SECRET: z.string().default("whsec_placeholder"),
 	MUX_TOKEN_ID: z.string().default("mux_token_id_placeholder"),
 	MUX_TOKEN_SECRET: z.string().default("mux_token_secret_placeholder"),
 	MUX_WEBHOOK_SECRET: z.string().default("mux_webhook_secret_placeholder"),

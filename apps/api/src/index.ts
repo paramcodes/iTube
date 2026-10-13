@@ -4,6 +4,7 @@ import { startDailyStatsRollup } from "./jobs/dailyStatsRollup";
 import { startSchedulingFallback } from "./jobs/schedulingFallback";
 import { startViewFlushJob } from "./jobs/viewFlush";
 import { channelRoutes } from "./routes/channels";
+import { clerkWebhookRoutes } from "./routes/clerk-webhook";
 import { commentRoutes } from "./routes/comments";
 import { feedRoutes } from "./routes/feed";
 import { reactionRoutes } from "./routes/reactions";
@@ -21,6 +22,7 @@ export const app = new Elysia()
 	.use(subscriptionRoutes)
 	.use(uploadRoutes)
 	.use(webhookRoutes)
+	.use(clerkWebhookRoutes)
 	.use(schedulingRoutes)
 	.use(videoRoutes)
 	.use(feedRoutes)
