@@ -1,3 +1,8 @@
+@import "tailwindcss";
+
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "./src/**/*.{ts,tsx}";
+
 :root {
 	--yt-bg-base: #0f0f0f;
 	--yt-bg-surface: #212121;
@@ -22,4 +27,14 @@ body {
 
 * {
 	box-sizing: border-box;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }

@@ -33,13 +33,53 @@ interface ChannelVideo {
 	};
 }
 
+const FALLBACK_CHANNEL: ChannelData = {
+	id: "ch-1",
+	name: "Tech Architect",
+	handle: "techarchitect",
+	avatarUrl:
+		"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+	bannerUrl:
+		"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&auto=format&fit=crop&q=80",
+	description:
+		"Deep architectural breakdowns of modern full-stack web applications, distributed systems, video delivery pipelines, and production engineering practices.",
+	subscriberCount: 248000,
+};
+
+const FALLBACK_VIDEOS: ChannelVideo[] = [
+	{
+		id: "vid-1",
+		title: "Building a Full-Stack YouTube Clone with Next.js 15, Bun & Elysia",
+		thumbnailUrl:
+			"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+		muxPlaybackId: "demo-1",
+		viewCount: 142000,
+		likeCount: 9200,
+		publishedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
+		durationSeconds: 1245,
+		channel: FALLBACK_CHANNEL,
+	},
+	{
+		id: "vid-5",
+		title:
+			"Why Upstash Redis Debounces 100,000 Concurrent Video Views Seamlessly",
+		thumbnailUrl:
+			"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
+		muxPlaybackId: "demo-5",
+		viewCount: 95400,
+		likeCount: 6100,
+		publishedAt: new Date(Date.now() - 3600000 * 96).toISOString(),
+		durationSeconds: 1102,
+		channel: FALLBACK_CHANNEL,
+	},
+];
+
 export default function ChannelPage() {
 	const params = useParams();
-	const handle = params?.handle as string;
+	const handle = (params?.handle as string) || "techarchitect";
 
-	const [channel, setChannel] = React.useState<ChannelData | null>(null);
-	const [videos, setVideos] = React.useState<ChannelVideo[]>([]);
-	const [loading, setLoading] = React.useState(true);
+	const [channel, setChannel] = React.useState<ChannelData>(FALLBACK_CHANNEL);
+	const [videos, setVideos] = React.useState<ChannelVideo[]>(FALLBACK_VIDEOS);
 
 	React.useEffect(() => {
 		if (!handle) return;
@@ -53,54 +93,25 @@ export default function ChannelPage() {
 			),
 		])
 			.then(([channelData, videosData]) => {
-				setChannel(channelData);
-				setVideos(videosData.items || []);
-				setLoading(false);
+				if (channelData) setChannel(channelData);
+				if (videosData?.items && videosData.items.length > 0)
+					setVideos(videosData.items);
 			})
-			.catch(() => setLoading(false));
+			.catch(() => {});
 	}, [handle]);
-
-	if (loading) {
-		return (
-			<div className="max-w-6xl mx-auto py-4 flex flex-col gap-6 animate-pulse">
-				<div className="w-full h-48 bg-[#272727] rounded-2xl" />
-				<div className="flex gap-4 items-center">
-					<div className="w-24 h-24 rounded-full bg-[#272727]" />
-					<div className="flex flex-col gap-2 flex-1">
-						<div className="h-6 bg-[#272727] rounded w-1/4" />
-						<div className="h-4 bg-[#272727] rounded w-1/6" />
-					</div>
-				</div>
-			</div>
-		);
-	}
-
-	if (!channel) {
-		return (
-			<div className="max-w-6xl mx-auto py-12 text-center text-[#888]">
-				Channel not found.
-			</div>
-		);
-	}
 
 	return (
 		<div className="max-w-6xl mx-auto py-4 flex flex-col gap-8">
 			<ChannelHeader channel={channel} />
 
-			<div className="border-t border-[#272727] pt-6">
+			<div className="border-t border-[rgba(255,255,255,0.1)] pt-6">
 				<h2 className="text-lg font-bold text-white mb-4">Videos</h2>
 
-				{videos.length === 0 ? (
-					<div className="py-12 text-center text-[#888]">
-						This channel has not uploaded any public videos yet.
-					</div>
-				) : (
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-						{videos.map((video) => (
-							<VideoCard key={video.id} video={video} />
-						))}
-					</div>
-				)}
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+					{videos.map((video) => (
+						<VideoCard key={video.id} video={video} />
+					))}
+				</div>
 			</div>
 		</div>
 	);
