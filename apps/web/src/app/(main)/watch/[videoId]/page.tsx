@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import * as React from "react";
+import { CommentsSection } from "../../../../components/comments/CommentsSection";
 import { VideoPlayer } from "../../../../components/player/VideoPlayer";
 import { env } from "../../../../env";
 import { useWatchProgress } from "../../../../hooks/useWatchProgress";
@@ -14,6 +15,7 @@ interface VideoDetail {
 	viewCount: number;
 	likeCount: number;
 	dislikeCount: number;
+	commentCount: number;
 	publishedAt: string | null;
 	channel: {
 		id: string;
@@ -63,7 +65,7 @@ export default function WatchPage() {
 	}
 
 	return (
-		<div className="max-w-6xl mx-auto py-2 flex flex-col gap-4">
+		<div className="max-w-6xl mx-auto py-2 flex flex-col gap-6">
 			<VideoPlayer
 				videoId={video.id}
 				playbackId={video.muxPlaybackId}
@@ -111,6 +113,8 @@ export default function WatchPage() {
 					</div>
 				)}
 			</div>
+
+			<CommentsSection videoId={video.id} commentCount={video.commentCount} />
 		</div>
 	);
 }
