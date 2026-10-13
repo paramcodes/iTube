@@ -1,7 +1,7 @@
 import { describe, expect, it, mock } from "bun:test";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderToStaticMarkup } from "react-dom/server";
 
-// Mock next/navigation and clerk hooks
 mock.module("next/navigation", () => ({
 	useRouter: () => ({ push: () => {} }),
 }));
@@ -15,10 +15,13 @@ import Shell from "../components/layout/Shell";
 
 describe("Shell", () => {
 	it("renders masthead and drawer", () => {
+		const queryClient = new QueryClient();
 		const html = renderToStaticMarkup(
-			<Shell>
-				<div>content</div>
-			</Shell>,
+			<QueryClientProvider client={queryClient}>
+				<Shell>
+					<div>content</div>
+				</Shell>
+			</QueryClientProvider>,
 		);
 		expect(html).toContain("masthead");
 		expect(html).toContain("guide-drawer");
