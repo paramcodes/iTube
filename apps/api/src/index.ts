@@ -10,6 +10,7 @@ import { reactionRoutes } from "./routes/reactions";
 import { schedulingRoutes } from "./routes/scheduling";
 import { searchRoutes } from "./routes/search";
 import { studioRoutes } from "./routes/studio";
+import { subscriptionRoutes } from "./routes/subscriptions";
 import { uploadRoutes } from "./routes/upload";
 import { videoRoutes } from "./routes/videos";
 import { webhookRoutes } from "./routes/webhooks";
@@ -17,6 +18,7 @@ import { webhookRoutes } from "./routes/webhooks";
 export const app = new Elysia()
 	.use(cors())
 	.use(channelRoutes)
+	.use(subscriptionRoutes)
 	.use(uploadRoutes)
 	.use(webhookRoutes)
 	.use(schedulingRoutes)
@@ -27,7 +29,6 @@ export const app = new Elysia()
 	.use(reactionRoutes)
 	.use(studioRoutes);
 
-// Background jobs only run in live server mode (not during test imports)
 if (process.env.NODE_ENV !== "test") {
 	startViewFlushJob();
 	startSchedulingFallback();
